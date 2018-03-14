@@ -1,3 +1,4 @@
+# Get delimiting character from the user.
 delimiter = raw_input("What is the delimiting value in this data?")
 
 # This list contains all of the numeric gene values along
