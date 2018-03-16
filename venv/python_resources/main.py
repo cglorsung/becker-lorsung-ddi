@@ -12,15 +12,13 @@ dataCollection = []
 with open("../data_sources/SigGene.arff", "r") as dataFile:
     for x in dataFile.readlines():
         if x[0].isdigit():
-            geneData.append(x.split(delimiter))
+            x = x.split(delimiter)
+            for j in x:
+                if j[0].isdigit():
+                    j = float(j)
+            geneData.append(x)
 dataFile.close()
-
-# Parse all numbers from strings to integers.
-for x in geneData:
-    for i in range(0, len(x)-1):
-        if x[i][0].isdigit():
-            x[i] = float(x[i])
 
 # Print all values that have been read and parsed.
 for x in geneData:
-    print x
+     print x
