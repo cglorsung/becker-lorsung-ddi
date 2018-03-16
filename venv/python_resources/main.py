@@ -1,3 +1,5 @@
+import math
+
 # Get delimiting character from the user.
 delimiter = raw_input("What is the delimiting value in this data?")
 
@@ -27,6 +29,7 @@ dataFile.close()
 #    print x
 
 
+# Manhattan distance function between two vectors
 def manhattan(dist1, dist2):
     totDist = 0
     for i in range(0, len(dist1)-1):
@@ -34,9 +37,24 @@ def manhattan(dist1, dist2):
     return totDist
 
 
+# Euclidean distance function between two vectors
+def euclidean(dist1, dist2):
+    totDist = 0
+    for i in range(0, len(dist1)-1):
+        totDist += (float(dist1[i]) - float(dist2[i]))**2
+    return math.sqrt(totDist)
+
+
 for i in range(1, len(geneData)-1):
     distData.append(manhattan(geneData[0], geneData[i]))
     #print manhattan(geneData[0], geneData[i])
+
+print distData
+
+distData = []
+
+for i in range(1, len(geneData)-1):
+    distData.append(euclidean(geneData[0], geneData[i]))
 
 print distData
 
