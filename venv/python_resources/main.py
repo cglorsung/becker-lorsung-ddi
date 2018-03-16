@@ -5,6 +5,9 @@ delimiter = raw_input("What is the delimiting value in this data?")
 # with their class label in the last index.
 geneData = []
 
+# This list contains all of the distances between one vector and the rest
+distData = []
+
 # No use yet.
 dataCollection = []
 
@@ -20,5 +23,20 @@ with open("../data_sources/SigGene.arff", "r") as dataFile:
 dataFile.close()
 
 # Print all values that have been read and parsed.
-for x in geneData:
-     print x
+#for x in geneData:
+#    print x
+
+
+def manhattan(dist1, dist2):
+    totDist = 0
+    for i in range(0, len(dist1)-1):
+        totDist += abs(float(dist1[i])-float(dist2[i]))
+    return totDist
+
+
+for i in range(1, len(geneData)-1):
+    distData.append(manhattan(geneData[0], geneData[i]))
+    #print manhattan(geneData[0], geneData[i])
+
+print distData
+
