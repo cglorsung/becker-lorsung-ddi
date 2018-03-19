@@ -57,4 +57,3 @@ for i in range(1, len(geneData)-1):
     distData.append(euclidean(geneData[0], geneData[i]))
 
 print distData
-

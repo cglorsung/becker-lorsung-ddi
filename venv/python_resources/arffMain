@@ -1,0 +1,69 @@
+# This file uses the liac-arff package authored by Renato de Pontes Pereira and Matthias Feurer
+# Authors: Conor Lorsung and Kyle Becker
+
+import arff
+import math
+import random
+
+dataset = arff.load(open("../data_sources/SigGene.arff", "rb"))
+
+datalen = len(dataset['data'])-1
+attrlen = len(dataset['attributes'])-1
+
+classes = []
+
+# Sample calls
+# To get data from first attribute
+#   data['data'][0]
+
+
+# Manhattan distance function between two vectors
+def manhattan(vec1, vec2):
+    dist = 0
+    for x in range(0, len(vec1)-1):
+        dist += abs(vec1[x] - vec2[x])
+    return dist
+
+
+# Euclidean distance function between two vectors
+def euclidean(vec1, vec2):
+    dist = 0
+    for x in range(0, len(vec1)-1):
+        dist += (vec1[x] - vec2[x])**2
+    return math.sqrt(dist)
+
+
+# K-means function for given data-set
+def kmeans(data, k):
+    centroids = []
+    for x in range(0, k):
+        index = random.randint(0, len(data)-1)
+        centroids.append(data[index])
+
+    for x in data:
+        mandists = []
+        eucdists = []
+        for y in centroids:
+            mandists.append(manhattan(y, x))
+            eucdists.append(euclidean(y, x))
+            # TO BE CONTINUED HERE
+    return centroids
+
+
+# Get the class values for the given data-set
+def classvals(data):
+    classlabels = []
+    classets = data['attributes'][attrlen][1]
+    for x in classets:
+        classlabels.append(x)
+    return classlabels
+
+
+print manhattan(dataset['data'][0], dataset['data'][1])
+
+print euclidean(dataset['data'][0], dataset['data'][1])
+
+print classvals(dataset)
+
+for x in kmeans(dataset['data'], 5):
+    print x
