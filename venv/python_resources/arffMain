@@ -5,6 +5,14 @@ import arff
 import math
 import random
 
+# Choose the distance measure to run with:
+#    man = manhattan distance
+#    euc = euclidean distance
+distMeasure = 'man'
+
+# Choose the K value to run with:
+k = 2
+
 dataset = arff.load(open("../data_sources/SigGene.arff", "rb"))
 
 datalen = len(dataset['data'])-1
@@ -13,6 +21,7 @@ attrlen = len(dataset['attributes'])-1
 classes = []
 
 recentroids = []
+
 
 # Sample calls
 # To get data from first attribute
@@ -45,10 +54,11 @@ def kmeans(data, k):
 
         mandists = []
         eucdists = []
-        clusters = []
+        mclusters = []
+        eclusters = []
 
         for x in range(0, k):
-            clusters.append([])
+            mclusters.append([])
         if len(centroids) == 0:
             for x in range(0, k):
                 index = random.randint(0, len(data)-1)
@@ -76,22 +86,41 @@ def kmeans(data, k):
                     mandists.append((centroids.index(y), i, manhattan(y, x)))
                     eucdists.append((centroids.index(y), i, euclidean(y, x)))
 
-        # Separate data into K clusters
-        for x in range(0, len(mandists),k):
-            dists = []
-            for i in range(0, k):
-                dists.append(mandists[x+i])
-            val = min(dists, key=lambda t: t[2])
-            clusters[val[0]].append(val)
+        # Determine which distance measure the user wants to run
+        if distMeasure == 'man':
+            # Separate data into K clusters
+            for x in range(0, len(mandists),k):
+                dists = []
+                for i in range(0, k):
+                    dists.append(mandists[x+i])
+                val = min(dists, key=lambda t: t[2])
+                mclusters[val[0]].append(val)
 
-        # Sort the data within the clusters by gene number
-        for x in clusters:
-            x.sort(key=lambda t: t[1])
+            # Sort the data within the clusters by gene number
+            for x in mclusters:
+                x.sort(key=lambda t: t[1])
 
-        for x in clusters:
-            print 'CLUSTER: ', x
+            for x in mclusters:
+                print 'CLUSTER: ', x
 
-        recentroids = recompute(clusters)
+            recentroids = recompute(mclusters)
+        elif distMeasure == 'euc':
+            # Separate data into K clusters
+            for x in range(0, len(eucdists), k):
+                dists = []
+                for i in range(0, k):
+                    dists.append(eucdists[x + i])
+                val = min(dists, key=lambda t: t[2])
+                eclusters[val[0]].append(val)
+
+            # Sort the data within the clusters by gene number
+            for x in eclusters:
+                x.sort(key=lambda t: t[1])
+
+            for x in eclusters:
+                print 'CLUSTER: ', x
+
+            recentroids = recompute(eclusters)
 
 
 # Recompute the centroids for the given data-set
@@ -135,4 +164,4 @@ print classvals(dataset)
 
 print len(dataset['data'])
 
-kmeans(dataset['data'], 2)
+kmeans(dataset['data'], k)
