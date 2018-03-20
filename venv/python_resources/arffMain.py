@@ -18,10 +18,12 @@ k = 4
 #    file = 1 -> AllGenes.arff
 file = 1
 
+dataset = []
+
 if file == 0:
-    dataset = arff.load(open("../data_sources/SigGene.arff", "rb"))
+    dataset = arff.load(open("../data_sources/SigGene.arff", "r"))
 elif file == 1:
-    dataset = arff.load(open("../data_sources/AllGenes.arff", "rb"))
+    dataset = arff.load(open("../data_sources/AllGenes.arff", "r"))
 
 datalen = len(dataset['data'])-1
 attrlen = len(dataset['attributes'])-1
@@ -73,9 +75,9 @@ def kmeans(data, k):
             for x in range(0, k):
                 index = random.randint(0, len(data)-1)
                 centroids.append(data[index])
-            print '\n'
+            print('\n')
             for x in centroids:
-               print 'CENTROID: ',data.index(x)+1
+               print('CENTROID: ',data.index(x)+1)
             i = 0
             for x in data:
                 i += 1
@@ -83,16 +85,17 @@ def kmeans(data, k):
                     mandists.append((centroids.index(y), i, manhattan(y, x)))
                     eucdists.append((centroids.index(y), i, euclidean(y, x)))
         elif recentroids == centroids:
-            print '\nCOMPLETED AFTER ', i, 'ITERATIONS\n'
+            print('\nCOMPLETED AFTER ', i, 'ITERATIONS\n')
             for x in recentroids:
-                print 'FINAL CENTROID: ', x
+                print('FINAL CENTROID: ', x)
+            print('\n')
             for x in finalClusters:
-                print 'FINAL CLUSTERS: ', x
+                print('FINAL CLUSTERS: Length = ', len(x),' : ', x)
             return
         else:
             centroids = recentroids
             for x in centroids:
-                print 'NEW CEN: ', x
+                print('NEW CEN: ', x)
             i = 0
             for x in data:
                 i += 1
@@ -115,7 +118,7 @@ def kmeans(data, k):
                 x.sort(key=lambda t: t[1])
 
             for x in mclusters:
-                print 'CLUSTER: ', x
+                print('CLUSTER: ', x)
 
             recentroids = recompute(mclusters)
             finalClusters = mclusters
@@ -133,7 +136,7 @@ def kmeans(data, k):
                 x.sort(key=lambda t: t[1])
 
             for x in eclusters:
-                print 'CLUSTER: ', x
+                print('CLUSTER: ', x)
 
             recentroids = recompute(eclusters)
             finalClusters = eclusters
@@ -141,7 +144,7 @@ def kmeans(data, k):
 
 # Recompute the centroids for the given data-set
 def recompute(centroids):
-    print 'LEN G1: ', len(centroids[0]), '\nLEN G2: ', len(centroids[1])
+    print('LEN G1: ', len(centroids[0]), '\nLEN G2: ', len(centroids[1]))
     newcentroids = []
     for x in range(0, len(centroids)):
         newcentroids.append(dataset['data'][centroids[x][0][1]-1][:-1])
@@ -150,14 +153,14 @@ def recompute(centroids):
             for n in range(0, len(opvec)-1):
                 newcentroids[x][n] += opvec[n]
     for x in newcentroids:
-        print x
+        print(x)
 
     for x in range(0, len(newcentroids)):
         for y in range(0, len(newcentroids[x])):
             newcentroids[x][y] = newcentroids[x][y] / len(centroids[x])
 
     for x in newcentroids:
-        print x
+        print(x)
 
     return newcentroids
 
@@ -172,12 +175,12 @@ def classvals(data):
     return classlabels
 
 
-print manhattan(dataset['data'][0], dataset['data'][1])
+print(manhattan(dataset['data'][0], dataset['data'][1]))
 
-print euclidean(dataset['data'][0], dataset['data'][1])
+print(euclidean(dataset['data'][0], dataset['data'][1]))
 
-print classvals(dataset)
+print(classvals(dataset))
 
-print len(dataset['data'])
+print(len(dataset['data']))
 
 kmeans(dataset['data'], k)
