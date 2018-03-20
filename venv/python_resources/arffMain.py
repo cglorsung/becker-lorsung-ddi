@@ -16,7 +16,7 @@ k = 4
 # Choose which file to run on:
 #    file = 0 -> SigGene.arff
 #    file = 1 -> AllGenes.arff
-file = 1
+file = 0
 
 dataset = []
 
@@ -184,3 +184,7 @@ print(classvals(dataset))
 print(len(dataset['data']))
 
 kmeans(dataset['data'], k)
+
+
+def returnVals():
+    return dataset
