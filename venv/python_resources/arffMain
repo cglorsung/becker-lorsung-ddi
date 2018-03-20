@@ -13,7 +13,15 @@ distMeasure = 'man'
 # Choose the K value to run with:
 k = 2
 
-dataset = arff.load(open("../data_sources/SigGene.arff", "rb"))
+# Choose which file to run on:
+#    file = 0 -> SigGene.arff
+#    file = 1 -> AllGenes.arff
+file = 1
+
+if file == 0:
+    dataset = arff.load(open("../data_sources/SigGene.arff", "rb"))
+elif file == 1:
+    dataset = arff.load(open("../data_sources/AllGenes.arff", "rb"))
 
 datalen = len(dataset['data'])-1
 attrlen = len(dataset['attributes'])-1
@@ -138,7 +146,7 @@ def recompute(centroids):
 
     for x in range(0, len(newcentroids)):
         for y in range(0, len(newcentroids[x])):
-            newcentroids[x][y] = newcentroids[x][y] / len(newcentroids[x])
+            newcentroids[x][y] = newcentroids[x][y] / len(centroids[x])
 
     for x in newcentroids:
         print x
