@@ -8,7 +8,7 @@ import random
 # Choose the distance measure to run with:
 #    man = manhattan distance
 #    euc = euclidean distance
-distMeasure = 'man'
+distMeasure = 'euc'
 
 # Choose the K value to run with:
 k = 4
@@ -68,6 +68,7 @@ def kmeans(data, k):
 
         for x in range(0, k):
             mclusters.append([])
+            eclusters.append([])
         if len(centroids) == 0:
             for x in range(0, k):
                 index = random.randint(0, len(data)-1)
