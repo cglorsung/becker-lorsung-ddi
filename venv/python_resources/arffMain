@@ -11,7 +11,7 @@ import random
 distMeasure = 'man'
 
 # Choose the K value to run with:
-k = 2
+k = 4
 
 # Choose which file to run on:
 #    file = 0 -> SigGene.arff
@@ -29,6 +29,8 @@ attrlen = len(dataset['attributes'])-1
 classes = []
 
 recentroids = []
+
+finalClusters = []
 
 
 # Sample calls
@@ -57,7 +59,6 @@ def kmeans(data, k):
 
     centroids = []
 
-
     for i in range(0, 100):
 
         mandists = []
@@ -81,7 +82,11 @@ def kmeans(data, k):
                     mandists.append((centroids.index(y), i, manhattan(y, x)))
                     eucdists.append((centroids.index(y), i, euclidean(y, x)))
         elif recentroids == centroids:
-            print 'COMPLETE AFTER ', i, ' ITERATIONS\n', centroids, '\n', recentroids
+            print '\nCOMPLETED AFTER ', i, 'ITERATIONS\n'
+            for x in recentroids:
+                print 'FINAL CENTROID: ', x
+            for x in finalClusters:
+                print 'FINAL CLUSTERS: ', x
             return
         else:
             centroids = recentroids
@@ -112,6 +117,7 @@ def kmeans(data, k):
                 print 'CLUSTER: ', x
 
             recentroids = recompute(mclusters)
+            finalClusters = mclusters
         elif distMeasure == 'euc':
             # Separate data into K clusters
             for x in range(0, len(eucdists), k):
@@ -129,6 +135,7 @@ def kmeans(data, k):
                 print 'CLUSTER: ', x
 
             recentroids = recompute(eclusters)
+            finalClusters = eclusters
 
 
 # Recompute the centroids for the given data-set
