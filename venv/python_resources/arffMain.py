@@ -25,20 +25,28 @@ if file == 0:
 elif file == 1:
     dataset = arff.load(open("../data_sources/AllGenes.arff", "r"))
 
+# Placeholder variables for various lengths in the dataset
 datalen = len(dataset['data'])-1
 attrlen = len(dataset['attributes'])-1
 
+# All of the class values present in the dataset
 classes = []
 
+# The recent centroids
 recentroids = []
 
+# The final clusters
 finalClusters = []
 
+# A simple test cluster. 10 nodes. Works with SigGene.arff
 testCluster = [(0, 34, 10872.81252758457), (0, 35, 15032.566296544312),
                (0, 36, 9734.507098975273), (0, 59, 18802.87375004151),
                (0, 60, 16246.020191419188), (0, 63, 16877.212040500053),
                (0, 64, 15164.62049838373), (0, 65, 13485.726434271162),
                (0, 66, 15712.412579231745), (0, 72, 15978.173057643358)]
+
+# Parent Entropy
+globalEntropy = 0
 
 # Sample calls
 # To get data from first attribute
@@ -184,12 +192,25 @@ def entropy(cluster):
     ent = 0
     totsize = 0
     ccounts = [0]*len(classes)
-    for x in cluster:
-        totsize += 1
-        ccounts[classes.index(getclass(x))] += 1
-    for x in ccounts:
-        ent += -(x / totsize) * math.log((x / totsize), 2)
-    return ent
+    if isinstance(cluster[0], tuple):
+        for x in cluster:
+            totsize += 1
+            ccounts[classes.index(getclass(x))] += 1
+        for x in ccounts:
+            ent += -(x / totsize) * math.log((x / totsize), 2)
+        return ent
+    else:
+        for x in cluster:
+            totsize += 1
+            ccounts[classes.index(x[attrlen])] += 1
+        for x in ccounts:
+            ent += -(x / totsize) * math.log((x / totsize), 2)
+        return ent
+
+
+# The information gain the set
+def infogain():
+    print('stop')
 
 
 # Retrieve the class label for the specified gene
@@ -211,4 +232,10 @@ print(len(dataset['data']))
 
 kmeans(dataset['data'], k)
 
-print(entropy(testCluster))
+print('\n')
+
+print('CLUSTER ENTROPY: ', entropy(testCluster))
+
+globalEntropy = entropy(dataset['data'])
+
+print('DATASET ENTROPY: ', globalEntropy)
